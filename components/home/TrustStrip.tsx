@@ -1,27 +1,23 @@
-const trustItems = [
-  { label: 'Lab-Verified Formulations' },
-  { label: 'Provider-Guided Protocols' },
-  { label: 'Discreet Shipping' },
-  { label: 'Research-Referenced' },
-  { label: 'Premium Peptide Quality' },
-]
+import { TRUST_BADGES } from '@/lib/copy'
 
 export default function TrustStrip() {
   return (
-    <section style={{ background: '#111111', borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)' }} className="py-5 overflow-hidden">
-      <div className="flex md:justify-center gap-0 overflow-x-auto scrollbar-hide">
-        <div className="flex items-center gap-0 min-w-max">
-          {trustItems.map((item, i) => (
+    <section
+      className="py-4 overflow-hidden"
+      style={{ background: '#E8541A' }}
+    >
+      <div className="flex md:justify-center overflow-x-auto">
+        <div className="flex items-center min-w-max">
+          {TRUST_BADGES.map((item, i) => (
             <div key={item.label} className="flex items-center">
-              <div className="flex items-center gap-3 px-6 py-2 whitespace-nowrap">
-                {/* Gold dot */}
-                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#C8A96E' }} />
-                <span className="text-xs" style={{ color: '#8A8580', letterSpacing: '0.08em' }}>
+              <div className="flex items-center gap-2.5 px-6 py-1 whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/60 shrink-0" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-white/90">
                   {item.label}
                 </span>
               </div>
-              {i < trustItems.length - 1 && (
-                <span className="w-px h-4 shrink-0" style={{ background: 'rgba(255,255,255,0.07)' }} />
+              {i < TRUST_BADGES.length - 1 && (
+                <span className="w-px h-4 shrink-0 bg-white/25" />
               )}
             </div>
           ))}

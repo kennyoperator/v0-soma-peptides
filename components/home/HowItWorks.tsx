@@ -1,55 +1,57 @@
-const steps = [
-  {
-    number: '01',
-    headline: 'Take the Assessment',
-    description: '7 questions, about 2 minutes.',
-  },
-  {
-    number: '02',
-    headline: 'Get Your Protocol',
-    description: 'Matched to your specific goals.',
-  },
-  {
-    number: '03',
-    headline: 'Start Your Journey',
-    description: 'Provider-guided from here on.',
-  },
-]
+import { HOW_IT_WORKS_STEPS } from '@/lib/copy'
+import { MessageSquare, Package, Zap } from 'lucide-react'
+
+const ICONS = [MessageSquare, Zap, Package]
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 px-6" style={{ background: '#0A0A0A' }}>
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <span className="label-caps">The Process</span>
-          <h2 className="mt-4 text-3xl md:text-4xl font-light" style={{ color: '#F0EDE8', letterSpacing: '-0.03em' }}>
-            Three steps to your protocol
+    <section className="py-20 md:py-28 px-6" style={{ background: '#E8541A' }}>
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-4xl font-black text-white" style={{ letterSpacing: '-0.025em' }}>
+            How to Order
           </h2>
+          <p className="mt-3 text-base text-white/75">
+            Simple. Fast. Discreet.
+          </p>
         </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 relative">
-          {/* Connector line (desktop) */}
-          <div className="hidden md:block absolute top-8 left-[16.66%] right-[16.66%] h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          {/* Connector line desktop */}
+          <div
+            className="hidden md:block absolute top-10 left-[20%] right-[20%] h-px"
+            style={{ background: 'rgba(255,255,255,0.25)' }}
+          />
 
-          {steps.map((step) => (
-            <div key={step.number} className="flex flex-col items-center text-center gap-5 px-6 py-4">
-              {/* Number badge */}
+          {HOW_IT_WORKS_STEPS.map((step, i) => {
+            const Icon = ICONS[i]
+            return (
               <div
-                className="w-16 h-16 rounded-full flex items-center justify-center relative z-10"
-                style={{ border: '1px solid rgba(200,169,110,0.35)', background: '#0A0A0A' }}
+                key={step.number}
+                className="flex flex-col items-center text-center gap-5 p-8 rounded-2xl"
+                style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
-                <span className="text-xs font-light" style={{ color: '#C8A96E', letterSpacing: '0.1em' }}>{step.number}</span>
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center relative z-10"
+                  style={{ background: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.4)' }}
+                >
+                  <Icon size={24} className="text-white" />
+                </div>
+                <div
+                  className="text-xs font-black uppercase tracking-widest"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                >
+                  Step {step.number}
+                </div>
+                <h3 className="text-lg font-bold text-white" style={{ letterSpacing: '-0.01em' }}>
+                  {step.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-white/75">
+                  {step.description}
+                </p>
               </div>
-              <h3 className="text-base font-light" style={{ color: '#F0EDE8', letterSpacing: '-0.01em' }}>
-                {step.headline}
-              </h3>
-              <p className="text-sm" style={{ color: '#8A8580', lineHeight: '1.7' }}>
-                {step.description}
-              </p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

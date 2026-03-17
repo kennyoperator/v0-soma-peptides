@@ -1,56 +1,59 @@
 import Link from 'next/link'
+import { MessageCircle, CheckCircle2 } from 'lucide-react'
+import { BRAND, TRUST_BADGES } from '@/lib/copy'
 
 export default function Hero() {
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-6 overflow-hidden" style={{ background: '#0A0A0A' }}>
-      {/* Gold radial glow */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          width: 600,
-          height: 600,
-          borderRadius: '50%',
-          background: 'radial-gradient(ellipse at center, rgba(200,169,110,0.10) 0%, transparent 70%)',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -60%)',
-          zIndex: 0,
-        }}
-      />
-
-      <div className="relative z-10 flex flex-col items-center gap-6 max-w-3xl mx-auto">
+    <section className="pt-28 pb-20 md:pt-36 md:pb-28 px-6 bg-white text-center">
+      <div className="max-w-3xl mx-auto flex flex-col items-center gap-6">
         {/* Eyebrow */}
-        <span className="label-caps">Personalized Peptide Protocols</span>
+        <span
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
+          style={{ background: '#FEF0E9', color: '#E8541A' }}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
+          Vietnam&apos;s #1 Peptide Source
+        </span>
 
         {/* H1 */}
-        <h1 className="text-4xl md:text-6xl font-light text-balance" style={{ letterSpacing: '-0.04em', lineHeight: '1.08', color: '#F0EDE8' }}>
-          Your biology is unique.{' '}
-          <br className="hidden md:block" />
-          Your protocol should be too.
+        <h1
+          className="text-4xl md:text-6xl font-black text-balance leading-tight"
+          style={{ letterSpacing: '-0.03em', color: '#1A1A1A' }}
+        >
+          {BRAND.tagline}
         </h1>
 
         {/* Subheadline */}
-        <p className="text-base md:text-lg max-w-lg" style={{ color: '#8A8580', lineHeight: '1.7' }}>
-          Answer 7 questions. Get a personalized peptide recommendation designed around your goals.
+        <p className="text-base md:text-lg max-w-xl leading-relaxed" style={{ color: '#6B7280' }}>
+          {BRAND.sub}
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
-          <Link href="/quiz" className="btn-gold px-8 py-3 rounded-sm text-sm tracking-wider uppercase">
-            Start My Assessment →
-          </Link>
-          <a href="#products" className="btn-ghost-gold px-8 py-3 rounded-sm text-sm tracking-wider uppercase">
-            Explore Products
+        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+          <a
+            href={BRAND.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary px-8 py-4 text-sm gap-2 w-full sm:w-auto"
+          >
+            <MessageCircle size={16} />
+            Order on WhatsApp →
           </a>
+          <Link
+            href="/products"
+            className="btn-outline px-8 py-4 text-sm w-full sm:w-auto"
+          >
+            View Products
+          </Link>
         </div>
 
-        {/* Trust line */}
-        <div className="mt-8 flex flex-wrap justify-center items-center gap-2" style={{ color: '#3A3A3A' }}>
-          {['Provider-guided protocols', 'Research-referenced formulations', 'Premium quality'].map((item, i) => (
-            <span key={item} className="flex items-center gap-2 text-xs" style={{ color: '#5A5652', letterSpacing: '0.04em' }}>
-              {i > 0 && <span style={{ color: '#2A2A2A' }}>·</span>}
-              {item}
-            </span>
+        {/* Trust badges */}
+        <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2">
+          {TRUST_BADGES.map((badge) => (
+            <div key={badge.label} className="flex items-center gap-1.5">
+              <CheckCircle2 size={14} style={{ color: '#E8541A' }} />
+              <span className="text-xs font-medium" style={{ color: '#6B7280' }}>{badge.label}</span>
+            </div>
           ))}
         </div>
       </div>
