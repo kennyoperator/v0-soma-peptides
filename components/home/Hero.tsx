@@ -10,13 +10,50 @@ export default function Hero() {
 
   return (
     <section className="pt-28 pb-20 md:pt-36 md:pb-28 px-6 bg-white overflow-hidden">
+      {/* Self-contained keyframes — guaranteed to be in the DOM */}
+      <style>{`
+        @keyframes float-center {
+          0%   { transform: translateY(0px); }
+          50%  { transform: translateY(-18px); }
+          100% { transform: translateY(0px); }
+        }
+        @keyframes float-side {
+          0%   { transform: translateY(0px); }
+          50%  { transform: translateY(-11px); }
+          100% { transform: translateY(0px); }
+        }
+        @keyframes fade-up-in {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes breathe {
+          0%, 100% { transform: scale(1);    opacity: 0.55; }
+          50%       { transform: scale(1.07); opacity: 0.38; }
+        }
+        .vial-float-center {
+          animation: float-center 3.8s ease-in-out infinite;
+        }
+        .vial-float-left {
+          animation: float-side 5.1s ease-in-out 0.65s infinite;
+        }
+        .vial-float-right {
+          animation: float-side 4.6s ease-in-out 1.2s infinite;
+        }
+        .hero-enter {
+          animation: fade-up-in 0.8s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        .hero-enter-delayed {
+          animation: fade-up-in 0.9s cubic-bezier(0.22,1,0.36,1) 0.12s both;
+        }
+        .circle-breathe {
+          animation: breathe 5.5s ease-in-out infinite;
+        }
+      `}</style>
+
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
         {/* Left — copy */}
-        <div
-          className="flex flex-col items-start gap-6"
-          style={{ animation: 'hero-fade-up 0.75s cubic-bezier(0.22,1,0.36,1) both' }}
-        >
+        <div className="hero-enter flex flex-col items-start gap-6">
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
             style={{ background: '#FEF0E9', color: '#E8541A' }}
@@ -62,90 +99,61 @@ export default function Hero() {
         </div>
 
         {/* Right — animated product vials */}
-        <div
-          className="relative flex items-center justify-center md:justify-end"
-          style={{ animation: 'hero-fade-up 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s both' }}
-        >
-          {/* Pulsing background circle */}
+        <div className="hero-enter-delayed relative flex items-center justify-center md:justify-end">
+
+          {/* Pulsing bg circles */}
           <div
-            className="absolute rounded-full"
-            style={{
-              width: '380px',
-              height: '380px',
-              background: '#FEF0E9',
-              animation: 'pulse-ring 6s ease-in-out infinite',
-            }}
+            className="circle-breathe absolute rounded-full pointer-events-none"
+            style={{ width: 380, height: 380, background: '#FEF0E9' }}
           />
-          {/* Inner ring for depth */}
           <div
-            className="absolute rounded-full"
-            style={{
-              width: '300px',
-              height: '300px',
-              background: '#FDE8DC',
-              opacity: 0.5,
-            }}
+            className="absolute rounded-full pointer-events-none"
+            style={{ width: 280, height: 280, background: '#FDE8DC', opacity: 0.4 }}
           />
 
-          {/* Three vials arranged in a slight arc */}
-          <div className="relative flex items-end justify-center gap-4 pb-4">
+          {/* Vial trio */}
+          <div className="relative flex items-end justify-center gap-4 pb-6 z-10">
 
-            {/* Left vial */}
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 10,
-                marginBottom: '-16px',
-                animation: 'vial-float-side 5.2s ease-in-out 0.6s infinite',
-                transform: 'rotate(-6deg)',
-              }}
-            >
-              <Image
-                src={left.imageUrl!}
-                alt={`${left.name} ${left.quantity} vial`}
-                width={130}
-                height={170}
-                className="object-contain drop-shadow-xl"
-                priority
-              />
+            {/* Left vial — rotate wrapper stays static, float wrapper animates */}
+            <div style={{ transform: 'rotate(-7deg)', transformOrigin: 'bottom center', marginBottom: -14 }}>
+              <div className="vial-float-left">
+                <Image
+                  src={left.imageUrl!}
+                  alt={`${left.name} ${left.quantity} vial`}
+                  width={125}
+                  height={165}
+                  className="object-contain drop-shadow-xl"
+                  priority
+                />
+              </div>
             </div>
 
-            {/* Center vial — largest / front */}
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 20,
-                animation: 'vial-float-center 4s ease-in-out infinite',
-              }}
-            >
-              <Image
-                src={center.imageUrl!}
-                alt={`${center.name} ${center.quantity} vial`}
-                width={175}
-                height={225}
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
+            {/* Center vial — tallest, front */}
+            <div style={{ zIndex: 2 }}>
+              <div className="vial-float-center">
+                <Image
+                  src={center.imageUrl!}
+                  alt={`${center.name} ${center.quantity} vial`}
+                  width={170}
+                  height={220}
+                  className="object-contain drop-shadow-2xl"
+                  priority
+                />
+              </div>
             </div>
 
             {/* Right vial */}
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 10,
-                marginBottom: '-16px',
-                animation: 'vial-float-side 4.7s ease-in-out 1.1s infinite',
-                transform: 'rotate(6deg)',
-              }}
-            >
-              <Image
-                src={right.imageUrl!}
-                alt={`${right.name} ${right.quantity} vial`}
-                width={130}
-                height={170}
-                className="object-contain drop-shadow-xl"
-                priority
-              />
+            <div style={{ transform: 'rotate(7deg)', transformOrigin: 'bottom center', marginBottom: -14 }}>
+              <div className="vial-float-right">
+                <Image
+                  src={right.imageUrl!}
+                  alt={`${right.name} ${right.quantity} vial`}
+                  width={125}
+                  height={165}
+                  className="object-contain drop-shadow-xl"
+                  priority
+                />
+              </div>
             </div>
 
           </div>
