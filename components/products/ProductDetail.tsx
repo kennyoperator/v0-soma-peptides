@@ -139,8 +139,24 @@ export default function ProductDetail({ product }: { product: Product }) {
             </div>
           </div>
 
-          {/* Right — COA + research points */}
+          {/* Right — product image, COA + research points */}
           <div className="flex flex-col gap-6">
+            {/* Product vial image */}
+            {product.imageUrl && (
+              <div
+                className="rounded-2xl flex items-center justify-center py-10"
+                style={{ background: '#F4F4F4' }}
+              >
+                <Image
+                  src={product.imageUrl}
+                  alt={`${product.name} ${product.quantity} vial by Soma Solutions`}
+                  width={260}
+                  height={320}
+                  className="object-contain drop-shadow-2xl"
+                />
+              </div>
+            )}
+
             {/* Research points */}
             <div
               className="rounded-2xl p-7 flex flex-col gap-4"

@@ -35,6 +35,7 @@ export const PRODUCTS = [
     included: ['1x 30mg vial', '1x 1mL insulin syringe', '1x 3mL bacteriostatic water'],
     purity: '99.594%',
     coaPublished: '2025-12-30',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-03-17%20at%2011.54.20%E2%80%AFPM-kDspBlagN0szCsTKExDruLf4ZaOthp.png',
   },
   {
     id: 'retatrutide',
@@ -48,6 +49,7 @@ export const PRODUCTS = [
     included: ['1x 20mg vial', '1x 1mL insulin syringe', '1x 3mL bacteriostatic water'],
     purity: '99.5%+',
     coaPublished: '2025-12-30',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-03-17%20at%2011.57.46%E2%80%AFPM-QR3CvT0R4yvqECTBEfJ1AQlTeey1JM.png',
   },
   {
     id: 'glow',
@@ -61,6 +63,7 @@ export const PRODUCTS = [
     included: ['1x GLOW blend vial', '1x 1mL insulin syringe', '1x 3mL bacteriostatic water'],
     purity: '99%+',
     coaPublished: '2025-12-30',
+    imageUrl: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-03-18%20at%2012.07.36%E2%80%AFAM-lUeJuNxtX8nQJslJ0iY1uh0zcz2fCu.png',
   },
 ]
 

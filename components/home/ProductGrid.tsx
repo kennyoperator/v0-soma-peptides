@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { MessageCircle, CheckCircle2, FlaskConical } from 'lucide-react'
+import Image from 'next/image'
+import { MessageCircle, CheckCircle2 } from 'lucide-react'
 import { PRODUCTS, BRAND } from '@/lib/copy'
 
 export default function ProductGrid() {
@@ -19,9 +20,25 @@ export default function ProductGrid() {
           {PRODUCTS.map((product) => (
             <div
               key={product.id}
-              className="group flex flex-col gap-5 p-6 rounded-2xl transition-all duration-300 hover:shadow-xl"
+              className="group flex flex-col gap-5 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl"
               style={{ background: '#FFFFFF', border: '2px solid #E5E7EB' }}
             >
+              {/* Product image */}
+              <div
+                className="relative w-full flex items-center justify-center py-8"
+                style={{ background: '#F4F4F4' }}
+              >
+                <Image
+                  src={product.imageUrl!}
+                  alt={`${product.name} ${product.quantity} vial`}
+                  width={180}
+                  height={220}
+                  className="object-contain drop-shadow-lg h-44 w-auto"
+                />
+              </div>
+
+              {/* Card body */}
+              <div className="flex flex-col gap-5 p-6 pt-4">
               {/* Tag */}
               <div className="flex items-center justify-between">
                 <span
@@ -96,6 +113,7 @@ export default function ProductGrid() {
                   View Details
                 </Link>
               </div>
+              </div>{/* end card body */}
             </div>
           ))}
         </div>
