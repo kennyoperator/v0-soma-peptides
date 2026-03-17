@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Nav from '@/components/layout/Nav'
 import Footer from '@/components/layout/Footer'
+import ProviderUpsellSection from '@/components/results/ProviderUpsellSection'
+import ConsultationEmbed from '@/components/results/ConsultationEmbed'
+import ConsultationFallback from '@/components/results/ConsultationFallback'
 import { quizResultsMap } from '@/lib/mock-data'
 import type { Goal } from '@/lib/quiz-logic'
 
@@ -162,6 +165,10 @@ export default function ResultsPage() {
           </div>
         </div>
       </div>
+
+      <ProviderUpsellSection />
+      <ConsultationEmbed />
+      <ConsultationFallback />
 
       <Footer />
     </main>
