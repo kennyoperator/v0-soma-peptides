@@ -1,19 +1,22 @@
-import Link from 'next/link'
+'use client'
+
 import Image from 'next/image'
+import Link from 'next/link'
 import { MessageCircle, CheckCircle2 } from 'lucide-react'
 import { BRAND, TRUST_BADGES, PRODUCTS } from '@/lib/copy'
 
 export default function Hero() {
-  const featuredProducts = PRODUCTS.slice(0, 3)
-  // Order: tirzepatide (left), retatrutide (center/featured), glow (right)
-  const [left, center, right] = featuredProducts
+  const [left, center, right] = PRODUCTS.slice(0, 3)
 
   return (
     <section className="pt-28 pb-20 md:pt-36 md:pb-28 px-6 bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
         {/* Left — copy */}
-        <div className="hero-copy-enter flex flex-col items-start gap-6">
+        <div
+          className="flex flex-col items-start gap-6"
+          style={{ animation: 'hero-fade-up 0.75s cubic-bezier(0.22,1,0.36,1) both' }}
+        >
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
             style={{ background: '#FEF0E9', color: '#E8541A' }}
@@ -43,10 +46,7 @@ export default function Hero() {
               <MessageCircle size={16} />
               Order on WhatsApp →
             </a>
-            <Link
-              href="/products"
-              className="btn-outline px-8 py-4 text-sm"
-            >
+            <Link href="/products" className="btn-outline px-8 py-4 text-sm">
               View Products
             </Link>
           </div>
@@ -62,25 +62,44 @@ export default function Hero() {
         </div>
 
         {/* Right — animated product vials */}
-        <div className="hero-vials-enter relative flex items-center justify-center md:justify-end">
-
+        <div
+          className="relative flex items-center justify-center md:justify-end"
+          style={{ animation: 'hero-fade-up 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s both' }}
+        >
           {/* Pulsing background circle */}
           <div
-            className="hero-ring-pulse absolute w-80 h-80 md:w-[420px] md:h-[420px] rounded-full"
-            style={{ background: '#FEF0E9' }}
+            className="absolute rounded-full"
+            style={{
+              width: '380px',
+              height: '380px',
+              background: '#FEF0E9',
+              animation: 'pulse-ring 6s ease-in-out infinite',
+            }}
           />
-
-          {/* Second, slightly larger static ring for depth */}
+          {/* Inner ring for depth */}
           <div
-            className="absolute w-72 h-72 md:w-96 md:h-96 rounded-full"
-            style={{ background: '#FDE8DC', opacity: 0.45 }}
+            className="absolute rounded-full"
+            style={{
+              width: '300px',
+              height: '300px',
+              background: '#FDE8DC',
+              opacity: 0.5,
+            }}
           />
 
           {/* Three vials arranged in a slight arc */}
           <div className="relative flex items-end justify-center gap-4 pb-4">
 
             {/* Left vial */}
-            <div className="vial-left relative z-10 -mb-4">
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 10,
+                marginBottom: '-16px',
+                animation: 'vial-float-side 5.2s ease-in-out 0.6s infinite',
+                transform: 'rotate(-6deg)',
+              }}
+            >
               <Image
                 src={left.imageUrl!}
                 alt={`${left.name} ${left.quantity} vial`}
@@ -92,7 +111,13 @@ export default function Hero() {
             </div>
 
             {/* Center vial — largest / front */}
-            <div className="vial-center relative z-20">
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 20,
+                animation: 'vial-float-center 4s ease-in-out infinite',
+              }}
+            >
               <Image
                 src={center.imageUrl!}
                 alt={`${center.name} ${center.quantity} vial`}
@@ -104,7 +129,15 @@ export default function Hero() {
             </div>
 
             {/* Right vial */}
-            <div className="vial-right relative z-10 -mb-4">
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 10,
+                marginBottom: '-16px',
+                animation: 'vial-float-side 4.7s ease-in-out 1.1s infinite',
+                transform: 'rotate(6deg)',
+              }}
+            >
               <Image
                 src={right.imageUrl!}
                 alt={`${right.name} ${right.quantity} vial`}

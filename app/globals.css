@@ -146,6 +146,16 @@
 }
 
 /* Hero vial animations */
+@keyframes vial-float-center {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-16px); }
+}
+
+@keyframes vial-float-side {
+  0%, 100% { transform: translateY(0px) rotate(var(--r, 0deg)); }
+  50%       { transform: translateY(-10px) rotate(var(--r, 0deg)); }
+}
+
 @keyframes vial-float {
   0%, 100% { transform: translateY(0px) rotate(var(--vial-rotate, 0deg)); }
   50%       { transform: translateY(-14px) rotate(var(--vial-rotate, 0deg)); }
