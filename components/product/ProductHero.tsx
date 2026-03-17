@@ -3,21 +3,25 @@ import Link from 'next/link'
 interface ProductHeroProps {
   tag: string
   name: string
-  subheadline: string
+  tagline: string
   sizes: string[]
+  accentColor?: 'gold' | 'teal'
 }
 
-export default function ProductHero({ tag, name, subheadline, sizes }: ProductHeroProps) {
+export default function ProductHero({ tag, name, tagline, sizes, accentColor = 'gold' }: ProductHeroProps) {
+  const accent = accentColor === 'teal' ? '#7B9EA6' : '#C8A96E'
+  const glowColor = accentColor === 'teal' ? 'rgba(123,158,166,0.07)' : 'rgba(200,169,110,0.07)'
+
   return (
-    <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0A0A' }}>
-      {/* Glow */}
+    <section className="relative pt-32 pb-20 px-6 overflow-hidden" style={{ background: '#0A0A0A' }}>
+      {/* Accent glow */}
       <div
         className="absolute pointer-events-none"
         style={{
           width: 500,
           height: 400,
           borderRadius: '50%',
-          background: 'radial-gradient(ellipse at center, rgba(200,169,110,0.07) 0%, transparent 70%)',
+          background: `radial-gradient(ellipse at center, ${glowColor} 0%, transparent 70%)`,
           top: '0',
           left: '50%',
           transform: 'translateX(-50%)',
@@ -25,21 +29,21 @@ export default function ProductHero({ tag, name, subheadline, sizes }: ProductHe
       />
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="flex flex-col gap-5">
-          <span className="label-caps" style={{ color: '#C8A96E' }}>{tag}</span>
+          <span className="label-caps" style={{ color: accent }}>{tag}</span>
           <h1 className="text-5xl md:text-6xl font-light" style={{ color: '#F0EDE8', letterSpacing: '-0.04em' }}>
             {name}
           </h1>
           <p className="text-base md:text-lg max-w-xl" style={{ color: '#8A8580', lineHeight: '1.7' }}>
-            {subheadline}
+            {tagline}
           </p>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-2">
-            <a href="#" className="btn-gold px-8 py-3 rounded-sm text-sm tracking-wider uppercase self-start">
-              Get Started
-            </a>
-            <Link href="/quiz" className="btn-ghost-gold px-6 py-3 rounded-sm text-xs tracking-wider uppercase self-start">
-              Take the Assessment First →
+            <Link href="/quiz" className="btn-gold px-8 py-3 rounded-sm text-sm tracking-wider uppercase self-start">
+              Start My Assessment →
             </Link>
+            <a href="#benefits" className="btn-ghost-gold px-6 py-3 rounded-sm text-xs tracking-wider uppercase self-start">
+              Learn More
+            </a>
           </div>
 
           {/* Sizes */}
