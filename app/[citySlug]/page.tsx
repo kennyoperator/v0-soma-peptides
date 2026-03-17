@@ -4,209 +4,318 @@ import Link from 'next/link'
 import Nav from '@/components/layout/Nav'
 import Footer from '@/components/layout/Footer'
 import CTASection from '@/components/CTASection'
-import { CheckCircle2, MapPin, Zap, Package } from 'lucide-react'
-import { CITY_PAGES } from '@/lib/cities'
+import { CheckCircle2, MapPin, Zap, Package, MessageCircle } from 'lucide-react'
+import { CITY_PAGES, SEO_PRODUCT_PAGES } from '@/lib/cities'
 import { PRODUCTS, BRAND } from '@/lib/copy'
-import { MessageCircle } from 'lucide-react'
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ citySlug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const page = CITY_PAGES.find((c) => c.slug === slug)
-  if (!page) return {}
-  return {
-    title: `Peptides in ${page.city} Vietnam | Fast Delivery | Soma Solutions`,
-    description: `Buy lab-tested peptides in ${page.city}, Vietnam. ${page.delivery} delivery. English support. COA verified by TrustPointe Analytics. Tirzepatide, Retatrutide, and GLOW available.`,
-    openGraph: {
-      title: `Peptides in ${page.city} | Soma Solutions`,
-      description: `Lab-tested peptides delivered to ${page.city}. ${page.delivery}. English support. Discreet packaging.`,
-    },
+  const { citySlug } = await params
+  const cityPage = CITY_PAGES.find((c) => c.slug === citySlug)
+  if (cityPage) {
+    return {
+      title: `Peptides in ${cityPage.city} Vietnam | Fast Delivery | Soma Solutions`,
+      description: `Buy lab-tested peptides in ${cityPage.city}, Vietnam. ${cityPage.delivery} delivery. English support. COA verified by TrustPointe Analytics.`,
+      openGraph: {
+        title: `Peptides in ${cityPage.city} | Soma Solutions`,
+        description: `Lab-tested peptides delivered to ${cityPage.city}. ${cityPage.delivery}. English support. Discreet packaging.`,
+      },
+    }
   }
+  const seoPage = SEO_PRODUCT_PAGES.find((p) => p.slug === citySlug)
+  if (seoPage) {
+    return {
+      title: seoPage.title,
+      description: seoPage.description,
+      openGraph: { title: seoPage.title, description: seoPage.description },
+    }
+  }
+  return {}
 }
 
 export function generateStaticParams() {
-  return CITY_PAGES.map((c) => ({ slug: c.slug }))
+  return [
+    ...CITY_PAGES.map((c) => ({ citySlug: c.slug })),
+    ...SEO_PRODUCT_PAGES.map((p) => ({ citySlug: p.slug })),
+  ]
 }
 
-export default async function CityPage({ params }: Props) {
-  const { slug } = await params
-  const page = CITY_PAGES.find((c) => c.slug === slug)
-  if (!page) notFound()
+export default async function SeoPage({ params }: Props) {
+  const { citySlug } = await params
 
-  return (
-    <>
-      {/* LocalBusiness schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'LocalBusiness',
-            name: 'Soma Solutions',
-            description: `Lab-tested peptide supplier in ${page.city}, Vietnam`,
-            url: `https://somasolutions.com/${page.slug}`,
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: page.schema.addressLocality,
-              addressRegion: page.schema.addressRegion,
-              addressCountry: 'VN',
-            },
-            contactPoint: {
-              '@type': 'ContactPoint',
-              contactType: 'customer service',
-              availableLanguage: ['English', 'Vietnamese'],
-            },
-          }),
-        }}
-      />
-
-      <Nav />
-      <main className="pt-24">
-        {/* Hero */}
-        <section className="py-16 md:py-20 px-6 bg-white">
-          <div className="max-w-3xl mx-auto flex flex-col gap-6">
-            <div className="flex items-center gap-2">
-              <MapPin size={16} style={{ color: '#E8541A' }} />
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#E8541A' }}>
-                {page.city}, Vietnam
-              </span>
+  // Try city page first
+  const cityPage = CITY_PAGES.find((c) => c.slug === citySlug)
+  if (cityPage) {
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'LocalBusiness',
+              name: 'Soma Solutions',
+              description: `Lab-tested peptide supplier in ${cityPage.city}, Vietnam`,
+              url: `https://somasolutions.com/${cityPage.slug}`,
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: cityPage.schema.addressLocality,
+                addressRegion: cityPage.schema.addressRegion,
+                addressCountry: 'VN',
+              },
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer service',
+                availableLanguage: ['English', 'Vietnamese'],
+              },
+            }),
+          }}
+        />
+        <Nav />
+        <main className="pt-24">
+          {/* Hero */}
+          <section className="py-16 md:py-20 px-6 bg-white">
+            <div className="max-w-3xl mx-auto flex flex-col gap-6">
+              <div className="flex items-center gap-2">
+                <MapPin size={16} style={{ color: '#E8541A' }} />
+                <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#E8541A' }}>
+                  {cityPage.city}, Vietnam
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-balance" style={{ letterSpacing: '-0.03em', color: '#1A1A1A' }}>
+                Peptides in {cityPage.city} — {cityPage.isHCMC ? 'Same-Day' : '2–4 Day'} Delivery
+              </h1>
+              <p className="text-base leading-relaxed max-w-2xl" style={{ color: '#6B7280' }}>
+                {cityPage.intro}
+              </p>
+              <div className="flex items-center gap-3">
+                {cityPage.isHCMC ? (
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: '#E8541A' }}>
+                    <Zap size={14} className="text-white" />
+                    <span className="text-xs font-bold text-white uppercase tracking-wide">Same-Day Delivery in {cityPage.city}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: '#FEF0E9' }}>
+                    <Package size={14} style={{ color: '#E8541A' }} />
+                    <span className="text-xs font-bold uppercase tracking-wide" style={{ color: '#E8541A' }}>2–4 Day Delivery to {cityPage.city}</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-primary px-7 py-4 text-sm gap-2 w-full sm:w-auto">
+                  <MessageCircle size={16} />
+                  Order on WhatsApp →
+                </a>
+                <Link href="/products" className="btn-outline px-7 py-4 text-sm w-full sm:w-auto">
+                  View Products
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-x-5 gap-y-2 mt-2">
+                {['99.9% Purity Verified', 'US Lab Tested', 'English Support', 'Discreet Packaging'].map((badge) => (
+                  <div key={badge} className="flex items-center gap-1.5">
+                    <CheckCircle2 size={13} style={{ color: '#E8541A' }} />
+                    <span className="text-xs font-medium" style={{ color: '#6B7280' }}>{badge}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <h1
-              className="text-4xl md:text-5xl font-black text-balance"
-              style={{ letterSpacing: '-0.03em', color: '#1A1A1A' }}
-            >
-              Peptides in {page.city} — {page.isHCMC ? 'Same-Day' : '2–4 Day'} Delivery
-            </h1>
-            <p className="text-base leading-relaxed" style={{ color: '#6B7280', maxWidth: '640px' }}>
-              {page.intro}
-            </p>
+          </section>
 
-            {/* Delivery badge */}
-            <div className="flex items-center gap-3">
-              {page.isHCMC ? (
-                <div
-                  className="flex items-center gap-2 px-4 py-2 rounded-full"
-                  style={{ background: '#E8541A' }}
-                >
-                  <Zap size={14} className="text-white" />
-                  <span className="text-xs font-bold text-white uppercase tracking-wide">Same-Day Delivery in {page.city}</span>
-                </div>
-              ) : (
-                <div
-                  className="flex items-center gap-2 px-4 py-2 rounded-full"
-                  style={{ background: '#FEF0E9' }}
-                >
-                  <Package size={14} style={{ color: '#E8541A' }} />
-                  <span className="text-xs font-bold uppercase tracking-wide" style={{ color: '#E8541A' }}>2–4 Day Delivery to {page.city}</span>
-                </div>
-              )}
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href={BRAND.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary px-7 py-4 text-sm gap-2 w-full sm:w-auto"
-              >
-                <MessageCircle size={16} />
-                Order on WhatsApp →
-              </a>
-              <Link href="/products" className="btn-outline px-7 py-4 text-sm w-full sm:w-auto">
-                View Products
-              </Link>
-            </div>
-
-            {/* Trust row */}
-            <div className="flex flex-wrap gap-x-5 gap-y-2 mt-2">
-              {['99.9% Purity Verified', 'US Lab Tested', 'English Support', 'Discreet Packaging'].map((badge) => (
-                <div key={badge} className="flex items-center gap-1.5">
-                  <CheckCircle2 size={13} style={{ color: '#E8541A' }} />
-                  <span className="text-xs font-medium" style={{ color: '#6B7280' }}>{badge}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Products */}
-        <section className="py-14 px-6" style={{ background: '#F9F9F9' }}>
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl font-black mb-8" style={{ color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-              Products available in {page.city}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {PRODUCTS.map((product) => (
-                <div
-                  key={product.id}
-                  className="rounded-2xl p-6 flex flex-col gap-4"
-                  style={{ background: '#FFFFFF', border: '2px solid #E5E7EB' }}
-                >
-                  <div>
-                    <span
-                      className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"
-                      style={{ background: '#FEF0E9', color: '#E8541A' }}
-                    >
+          {/* Products */}
+          <section className="py-14 px-6" style={{ background: '#F9F9F9' }}>
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-2xl font-black mb-8" style={{ color: '#1A1A1A', letterSpacing: '-0.02em' }}>
+                Products available in {cityPage.city}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {PRODUCTS.map((product) => (
+                  <div key={product.id} className="rounded-2xl p-6 flex flex-col gap-4" style={{ background: '#FFFFFF', border: '2px solid #E5E7EB' }}>
+                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full self-start" style={{ background: '#FEF0E9', color: '#E8541A' }}>
                       {product.tag}
                     </span>
+                    <h3 className="text-xl font-black" style={{ color: '#1A1A1A' }}>{product.name}</h3>
+                    <div className="text-xl font-black" style={{ color: '#E8541A' }}>{product.priceVnd}</div>
+                    <p className="text-xs" style={{ color: '#9CA3AF' }}>
+                      {cityPage.isHCMC ? 'Same-day delivery available' : `Ships to ${cityPage.city} in 2–4 days`}
+                    </p>
+                    <div className="flex gap-2 mt-auto">
+                      <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-primary flex-1 py-3 text-xs gap-1.5">
+                        <MessageCircle size={13} />
+                        Order
+                      </a>
+                      <Link href={product.slug} className="btn-outline flex-1 py-3 text-xs">Details</Link>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-black" style={{ color: '#1A1A1A' }}>{product.name}</h3>
-                  <div className="text-xl font-black" style={{ color: '#E8541A' }}>{product.priceVnd}</div>
-                  <div className="text-xs mt-auto" style={{ color: '#9CA3AF' }}>
-                    {page.isHCMC ? 'Same-day delivery available' : `Ships to ${page.city} in 2–4 days`}
-                  </div>
-                  <div className="flex gap-2">
-                    <a
-                      href={BRAND.whatsapp}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-primary flex-1 py-3 text-xs gap-1.5"
-                    >
-                      <MessageCircle size={13} />
-                      Order
-                    </a>
-                    <Link href={product.slug} className="btn-outline flex-1 py-3 text-xs">
-                      Details
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* City FAQ */}
-        <section className="py-14 px-6 bg-white">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-2xl font-black mb-8" style={{ color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-              Questions about delivery to {page.city}
-            </h2>
-            <div className="flex flex-col gap-4">
-              {page.faq.map((item, i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl p-6 flex flex-col gap-3"
-                  style={{ background: '#F9F9F9', border: '1px solid #E5E7EB' }}
-                >
-                  <h3 className="text-sm font-bold" style={{ color: '#1A1A1A' }}>{item.q}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{item.a}</p>
-                </div>
-              ))}
+          {/* City FAQ */}
+          <section className="py-14 px-6 bg-white">
+            <div className="max-w-2xl mx-auto">
+              <h2 className="text-2xl font-black mb-8" style={{ color: '#1A1A1A', letterSpacing: '-0.02em' }}>
+                Questions about delivery to {cityPage.city}
+              </h2>
+              <div className="flex flex-col gap-4">
+                {cityPage.faq.map((item, i) => (
+                  <div key={i} className="rounded-2xl p-6 flex flex-col gap-3" style={{ background: '#F9F9F9', border: '1px solid #E5E7EB' }}>
+                    <h3 className="text-sm font-bold" style={{ color: '#1A1A1A' }}>{item.q}</h3>
+                    <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{item.a}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <CTASection
-          headline={`Order peptides in ${page.city} today`}
-          sub={`Message us on WhatsApp or Telegram. ${page.isHCMC ? 'Same-day delivery in HCMC.' : `We ship to ${page.city} in 2–4 days.`} English support always.`}
-          cta="Order on WhatsApp →"
+          <CTASection
+            headline={`Order peptides in ${cityPage.city} today`}
+            sub={`Message us on WhatsApp or Telegram. ${cityPage.isHCMC ? 'Same-day delivery in HCMC.' : `We ship to ${cityPage.city} in 2–4 days.`} English support always.`}
+            cta="Order on WhatsApp →"
+          />
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
+  // Try SEO product page
+  const seoPage = SEO_PRODUCT_PAGES.find((p) => p.slug === citySlug)
+  if (seoPage) {
+    const featuredProduct = PRODUCTS.find((p) => p.name === seoPage.productName)
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Product',
+              name: `${seoPage.productName} — Soma Solutions Vietnam`,
+              description: seoPage.description,
+              brand: { '@type': 'Brand', name: 'Soma Solutions' },
+              offers: {
+                '@type': 'Offer',
+                price: seoPage.price,
+                priceCurrency: 'VND',
+                availability: 'https://schema.org/InStock',
+                seller: { '@type': 'Organization', name: 'Soma Solutions' },
+              },
+            }),
+          }}
         />
-      </main>
-      <Footer />
-    </>
-  )
+        <Nav />
+        <main className="pt-24">
+          <section className="py-16 md:py-24 px-6 bg-white">
+            <div className="max-w-3xl mx-auto flex flex-col gap-6">
+              <span className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full self-start" style={{ background: '#FEF0E9', color: '#E8541A' }}>
+                Vietnam
+              </span>
+              <h1 className="text-4xl md:text-5xl font-black text-balance" style={{ letterSpacing: '-0.03em', color: '#1A1A1A' }}>
+                {seoPage.title.split(' | ')[0]}
+              </h1>
+              <p className="text-base leading-relaxed max-w-2xl" style={{ color: '#6B7280', lineHeight: '1.85' }}>
+                {seoPage.intro}
+              </p>
+              <div className="flex flex-wrap gap-x-5 gap-y-2">
+                {['99.9% Purity Verified', 'US Lab Tested', 'Same-Day HCMC Delivery', 'English Support', 'Discreet Packaging'].map((badge) => (
+                  <div key={badge} className="flex items-center gap-1.5">
+                    <CheckCircle2 size={13} style={{ color: '#E8541A' }} />
+                    <span className="text-xs font-medium" style={{ color: '#6B7280' }}>{badge}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 mt-2">
+                <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-primary px-8 py-4 text-sm gap-2 w-full sm:w-auto">
+                  <MessageCircle size={16} />
+                  Order on WhatsApp →
+                </a>
+                <Link href={seoPage.productSlug} className="btn-outline px-8 py-4 text-sm w-full sm:w-auto">
+                  View Product Details
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          {featuredProduct ? (
+            <section className="py-14 px-6" style={{ background: '#F9F9F9' }}>
+              <div className="max-w-3xl mx-auto">
+                <div className="rounded-2xl p-8 flex flex-col gap-5" style={{ background: '#FFFFFF', border: '2px solid #E5E7EB' }}>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full" style={{ background: '#FEF0E9', color: '#E8541A' }}>
+                      {featuredProduct.tag}
+                    </span>
+                    <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full" style={{ background: '#F0FFF4', color: '#16A34A' }}>
+                      <CheckCircle2 size={10} />
+                      Lab Verified
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-black" style={{ color: '#1A1A1A', letterSpacing: '-0.02em' }}>{featuredProduct.name}</h2>
+                  <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{featuredProduct.descriptor}</p>
+                  <div>
+                    <div className="text-2xl font-black" style={{ color: '#E8541A' }}>{featuredProduct.priceVnd}</div>
+                    <div className="text-sm mt-0.5" style={{ color: '#9CA3AF' }}>{featuredProduct.priceUsd} · {featuredProduct.quantity}</div>
+                  </div>
+                  <ul className="flex flex-col gap-2">
+                    {featuredProduct.included.map((item) => (
+                      <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: '#6B7280' }}>
+                        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: '#E8541A' }} />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex gap-3 mt-2">
+                    <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-primary flex-1 py-4 text-sm gap-2">
+                      <MessageCircle size={15} />
+                      Order Now
+                    </a>
+                    <Link href={featuredProduct.slug} className="btn-outline flex-1 py-4 text-sm">Full Details</Link>
+                  </div>
+                </div>
+              </div>
+            </section>
+          ) : (
+            <section className="py-14 px-6" style={{ background: '#F9F9F9' }}>
+              <div className="max-w-5xl mx-auto">
+                <h2 className="text-2xl font-black mb-8 text-center" style={{ color: '#1A1A1A', letterSpacing: '-0.02em' }}>
+                  Products available in Vietnam
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {PRODUCTS.map((product) => (
+                    <div key={product.id} className="rounded-2xl p-6 flex flex-col gap-4" style={{ background: '#FFFFFF', border: '2px solid #E5E7EB' }}>
+                      <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full self-start" style={{ background: '#FEF0E9', color: '#E8541A' }}>
+                        {product.tag}
+                      </span>
+                      <h3 className="text-xl font-black" style={{ color: '#1A1A1A' }}>{product.name}</h3>
+                      <div className="text-xl font-black" style={{ color: '#E8541A' }}>{product.priceVnd}</div>
+                      <div className="flex gap-2 mt-auto">
+                        <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-primary flex-1 py-3 text-xs gap-1.5">
+                          <MessageCircle size={13} />
+                          Order
+                        </a>
+                        <Link href={product.slug} className="btn-outline flex-1 py-3 text-xs">Details</Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          <CTASection
+            headline={`Order ${seoPage.productName} in Vietnam`}
+            sub="Lab-tested. Same-day delivery in HCMC. English support on WhatsApp and Telegram."
+            cta="Order on WhatsApp →"
+          />
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
+  // Neither matched
+  notFound()
 }
