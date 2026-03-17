@@ -1,46 +1,53 @@
-import { testimonials } from '@/lib/mock-data'
+import { TESTIMONIALS } from '@/lib/copy'
 
-interface TestimonialCardProps {
-  quote: string
-  name: string
-  goal: string
-}
-
-export function TestimonialCard({ quote, name, goal }: TestimonialCardProps) {
+function StarRow({ count }: { count: number }) {
   return (
-    <div
-      className="flex flex-col gap-5 p-7 rounded-sm min-w-[300px] md:min-w-0"
-      style={{ background: '#161616', border: '1px solid rgba(255,255,255,0.07)' }}
-    >
-      {/* Gold quote mark */}
-      <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-        <path d="M0 16V9.6C0 4.267 2.933 1.067 8.8 0L9.6 1.6C7.2 2.133 5.6 3.2 4.8 4.8H8V16H0ZM12 16V9.6C12 4.267 14.933 1.067 20.8 0L21.6 1.6C19.2 2.133 17.6 3.2 16.8 4.8H20V16H12Z" fill="#C8A96E" fillOpacity="0.4"/>
-      </svg>
-      <p className="text-sm flex-1" style={{ color: '#F0EDE8', lineHeight: '1.8' }}>
-        {quote}
-      </p>
-      <div className="flex items-center gap-3">
-        <span className="text-xs font-medium" style={{ color: '#8A8580' }}>{name}</span>
-        <span className="w-px h-3" style={{ background: 'rgba(255,255,255,0.1)' }} />
-        <span className="label-caps" style={{ color: '#C8A96E', fontSize: '10px' }}>{goal}</span>
-      </div>
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: count }).map((_, i) => (
+        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#E8541A">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      ))}
     </div>
   )
 }
 
 export default function Testimonials() {
   return (
-    <section className="py-24 px-6" style={{ background: '#111111' }}>
-      <div className="max-w-5xl mx-auto">
+    <section className="py-20 md:py-28 px-6 bg-white">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <span className="label-caps">Client Experiences</span>
-          <h2 className="mt-4 text-3xl md:text-4xl font-light" style={{ color: '#F0EDE8', letterSpacing: '-0.03em' }}>
-            What clients are saying
+          <span
+            className="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full"
+            style={{ background: '#FEF0E9', color: '#E8541A' }}
+          >
+            Customer Results
+          </span>
+          <h2 className="mt-5 text-3xl md:text-4xl font-black text-balance" style={{ letterSpacing: '-0.025em', color: '#1A1A1A' }}>
+            What our customers are saying
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible flex md:grid">
-          {testimonials.map((t) => (
-            <TestimonialCard key={t.id} quote={t.quote} name={t.name} goal={t.goal} />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {TESTIMONIALS.map((t) => (
+            <div
+              key={t.id}
+              className="flex flex-col gap-5 p-7 rounded-2xl"
+              style={{ background: '#F9F9F9', border: '1px solid #E5E7EB' }}
+            >
+              <StarRow count={t.stars} />
+              <p className="text-sm leading-relaxed flex-1" style={{ color: '#1A1A1A', lineHeight: '1.8' }}>
+                &ldquo;{t.quote}&rdquo;
+              </p>
+              <div className="flex items-center gap-3 pt-2" style={{ borderTop: '1px solid #E5E7EB' }}>
+                <div>
+                  <div className="text-sm font-bold" style={{ color: '#1A1A1A' }}>{t.name}</div>
+                  <div className="text-xs mt-0.5" style={{ color: '#6B7280' }}>
+                    {t.city} · {t.product}
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
