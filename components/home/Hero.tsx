@@ -5,13 +5,15 @@ import { BRAND, TRUST_BADGES, PRODUCTS } from '@/lib/copy'
 
 export default function Hero() {
   const featuredProducts = PRODUCTS.slice(0, 3)
+  // Order: tirzepatide (left), retatrutide (center/featured), glow (right)
+  const [left, center, right] = featuredProducts
 
   return (
     <section className="pt-28 pb-20 md:pt-36 md:pb-28 px-6 bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
         {/* Left — copy */}
-        <div className="flex flex-col items-start gap-6">
+        <div className="hero-copy-enter flex flex-col items-start gap-6">
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest"
             style={{ background: '#FEF0E9', color: '#E8541A' }}
@@ -59,48 +61,60 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right — product vials */}
-        <div className="relative flex items-center justify-center md:justify-end">
-          {/* Background circle */}
+        {/* Right — animated product vials */}
+        <div className="hero-vials-enter relative flex items-center justify-center md:justify-end">
+
+          {/* Pulsing background circle */}
           <div
-            className="absolute w-80 h-80 md:w-96 md:h-96 rounded-full"
-            style={{ background: '#FEF0E9', opacity: 0.6 }}
+            className="hero-ring-pulse absolute w-80 h-80 md:w-[420px] md:h-[420px] rounded-full"
+            style={{ background: '#FEF0E9' }}
+          />
+
+          {/* Second, slightly larger static ring for depth */}
+          <div
+            className="absolute w-72 h-72 md:w-96 md:h-96 rounded-full"
+            style={{ background: '#FDE8DC', opacity: 0.45 }}
           />
 
           {/* Three vials arranged in a slight arc */}
-          <div className="relative flex items-end justify-center gap-4">
-            {/* Left vial — smaller / behind */}
-            <div className="relative z-10 -mb-4" style={{ transform: 'rotate(-6deg)' }}>
+          <div className="relative flex items-end justify-center gap-4 pb-4">
+
+            {/* Left vial */}
+            <div className="vial-left relative z-10 -mb-4">
               <Image
-                src={featuredProducts[0].imageUrl!}
-                alt={`${featuredProducts[0].name} ${featuredProducts[0].quantity} vial`}
+                src={left.imageUrl!}
+                alt={`${left.name} ${left.quantity} vial`}
                 width={130}
                 height={170}
-                className="object-contain drop-shadow-lg"
+                className="object-contain drop-shadow-xl"
+                priority
               />
             </div>
 
             {/* Center vial — largest / front */}
-            <div className="relative z-20" style={{ transform: 'rotate(0deg)' }}>
+            <div className="vial-center relative z-20">
               <Image
-                src={featuredProducts[1].imageUrl!}
-                alt={`${featuredProducts[1].name} ${featuredProducts[1].quantity} vial`}
-                width={165}
-                height={215}
+                src={center.imageUrl!}
+                alt={`${center.name} ${center.quantity} vial`}
+                width={175}
+                height={225}
                 className="object-contain drop-shadow-2xl"
+                priority
               />
             </div>
 
-            {/* Right vial — smaller / behind */}
-            <div className="relative z-10 -mb-4" style={{ transform: 'rotate(6deg)' }}>
+            {/* Right vial */}
+            <div className="vial-right relative z-10 -mb-4">
               <Image
-                src={featuredProducts[2].imageUrl!}
-                alt={`${featuredProducts[2].name} ${featuredProducts[2].quantity} vial`}
+                src={right.imageUrl!}
+                alt={`${right.name} ${right.quantity} vial`}
                 width={130}
                 height={170}
-                className="object-contain drop-shadow-lg"
+                className="object-contain drop-shadow-xl"
+                priority
               />
             </div>
+
           </div>
         </div>
 
